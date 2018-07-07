@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { WebsocketService } from './websocket.service';
-import { ChatService } from './chat.service';
+import { Component, OnInit, OnChanges } from '@angular/core';
+import { WebsocketService } from './services/websocket.service';
+import { ChatService } from './services/chat.service';
 
 @Component({
   selector: 'app-root',
@@ -8,23 +8,24 @@ import { ChatService } from './chat.service';
   styleUrls: ['./app.component.css'],
   providers: [ WebsocketService, ChatService ]
 })
-export class AppComponent {
+export class AppComponent implements OnChanges {
 
+  public flag = true;
 	constructor(private chatService: ChatService) {
-		chatService.messages.subscribe(msg => {			
-      console.log("Response from websocket: " + msg);
-		});
-	}
+    this.ngOnChanges()
+  }
+  
+ngOnChanges(){
 
-  private message = {
-		author: 'tutorialedge',
-		message: 'this is a test message'
-	}
+  this.chatService.messages.subscribe(msg => {
+    if(msg.flag){
+      console.log(msg.flag)
+      this.flag = false; 
+    }
+  });
 
-  sendMsg() {
-		console.log('new message from client to websocket: ', this.message);
-		this.chatService.messages.next(this.message);
-		this.message.message = '';
-	}
+}
+
+	
 
 }
