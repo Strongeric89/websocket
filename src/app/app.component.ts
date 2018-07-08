@@ -2,6 +2,7 @@ import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { WebsocketService } from './services/websocket.service';
 import { ChatService } from './services/chat.service';
 import { ChartComponent } from './chart/chart.component';
+import {LiftComponent} from './lift/lift.component';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/observable/zip';
 
@@ -16,15 +17,18 @@ export class AppComponent {
   flag = true;
 
   @ViewChild(ChartComponent) chart;
+  @ViewChild(LiftComponent) lift;
 
-	constructor(private chatService: ChatService) {
+
+	constructor() {
   
   }
 
   ngOnInit(){
     Observable
-    .zip(this.chart.loadedState$ ) //Add as many as you want here... 
+    .zip( this.lift.loadedState$, this.chart.loadedState$ ) //Add as many as you want here... 
     .subscribe(pair => {
+      
       console.log('All child components loaded');
       this.flag = false;
     });

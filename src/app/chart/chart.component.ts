@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {ChatService} from '../services/chat.service'
 import { AsynchronouslyInitialisedComponent } from '../asynchronously-initialised/asynchronously-initialised.component';
 
@@ -14,31 +14,35 @@ export class ChartComponent extends AsynchronouslyInitialisedComponent implement
   public cols = [];
   public chartFlag: boolean;
 
-  constructor(private chatSerivice:ChatService) { 
-    super()
+  constructor(private chatService:ChatService) { 
+   super()
+  }
+
+  public parseSample(data){
+   
+    this.rows = data['rows']
+        this.cols = data['columns']
+        this.chartFlag = true;
+
+    
+          this.componentLoaded();
+     
+
+
+
   }
 
   ngOnInit() {
-    this.chatSerivice.messages.subscribe(data =>{
 
+ 
+    this.chatService.messages.subscribe(data =>{
       //getting data from the websocket - chat service
         console.log(data.message['sample'])
-        this.rows = data.message['sample']['rows']
-        this.cols = data.message['sample']['columns']
-        this.chartFlag = true;
-
-        this.componentLoaded();
-
-        
+        this.parseSample(data.message['sample'])
+      
     });
 
-    
-
   
-  
+}//end ngOnInit
 
-}
-
-
-
-}
+}//end class
