@@ -6,7 +6,8 @@ import { ChartComponent } from './chart/chart.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ChartComponent
+    ChartComponent,
+  
   ],
   imports: [
     BrowserModule

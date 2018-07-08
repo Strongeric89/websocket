@@ -1,6 +1,9 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { WebsocketService } from './services/websocket.service';
 import { ChatService } from './services/chat.service';
+import { ChartComponent } from './chart/chart.component';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/observable/zip';
 
 @Component({
   selector: 'app-root',
@@ -8,24 +11,32 @@ import { ChatService } from './services/chat.service';
   styleUrls: ['./app.component.css'],
   providers: [ WebsocketService, ChatService ]
 })
-export class AppComponent implements OnChanges {
+export class AppComponent {
 
-  public flag = true;
+  flag = true;
+
+  @ViewChild(ChartComponent) chart;
+
 	constructor(private chatService: ChatService) {
-    this.ngOnChanges()
-  }
   
-ngOnChanges(){
+  }
 
-  this.chatService.messages.subscribe(msg => {
-    if(msg.flag){
-      console.log(msg.flag)
-      this.flag = false; 
-    }
-  });
+  ngOnInit(){
+    Observable
+    .zip(this.chart.loadedState$ ) //Add as many as you want here... 
+    .subscribe(pair => {
+      console.log('All child components loaded');
+      this.flag = false;
+    });
+  }
 
-}
 
-	
+
+ 
+
+
+
+  
+  
 
 }
